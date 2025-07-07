@@ -34,5 +34,15 @@ async def go(ctx):
             await ctx.send("Pokémonun görüntüsü yüklenemedi!")
     else:
         await ctx.send("Zaten kendi Pokémonunuzu oluşturdunuz!")  # Bir Pokémon'un daha önce oluşturulup oluşturulmadığını gösteren bir mesaj
+
+@bot.command()
+async def feed(ctx):
+    author = ctx.author.name
+    if author in Pokemon.pokemons.keys():
+        pokemon = Pokemon.pokemons[author]
+        pokemon.height += 1
+        await ctx.send(f"{pokemon.name} besleniyor! Yüksekliği şimdi: {pokemon.height}")
+    else:
+        await ctx.send("Önce bir Pokémon oluşturmalısınız! `!go` komutunu kullanın.")
 # Botun çalıştırılması
 bot.run(token)
