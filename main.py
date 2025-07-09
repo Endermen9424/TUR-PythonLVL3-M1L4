@@ -1,7 +1,8 @@
 import discord
 from discord.ext import commands
 from config import token
-from logic import Pokemon
+from logic import Pokemon, Wizard, Fighter
+import random
 
 # Bot için yetkileri/intents ayarlama
 intents = discord.Intents.default()  # Varsayılan ayarların alınması
