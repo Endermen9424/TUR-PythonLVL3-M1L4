@@ -61,7 +61,8 @@ async def feed(ctx):
     author = ctx.author.name
     if author in Pokemon.pokemons.keys():
         pokemon = Pokemon.pokemons[author]
-        pokemon.feed()
+        response = await pokemon.feed()
+        await ctx.send(response)
         #await ctx.send(f"{pokemon.name} besleniyor! Yüksekliği şimdi: {pokemon.height}")
         #await ctx.send(f"{pokemon.name} canı şimdi: {pokemon.hp}")
     else:
