@@ -1,5 +1,6 @@
 import aiohttp  # Eşzamansız HTTP istekleri için bir kütüphane
 import random
+from datetime import datetime, timedelta
 
 class Pokemon:
     pokemons = {}
@@ -11,6 +12,7 @@ class Pokemon:
         self.height = None
         self.power = random.randint(30, 60)  # Pokémon'un gücünü rastgele bir değer olarak ayarlar
         self.hp = random.randint(200, 400)  # Pokémon'un can puanını rastgele bir değer olarak ayarlar
+        self.last_feed_time = datetime.now()  # Pokémon'un son beslenme zamanını ayarlar
         if pokemon_trainer not in Pokemon.pokemons:
             Pokemon.pokemons[pokemon_trainer] = self
         else:
@@ -71,12 +73,34 @@ class Pokemon:
         else:
             enemy.hp = 0
             return f"Pokémon eğitmeni @{self.pokemon_trainer} @{enemy.pokemon_trainer}'ni yendi!"
+        
+    async def feed(self, feed_interval=20, hp_increase=10):
+        current_time = datetime.now()
+        delta_time = timedelta(seconds=feed_interval)
+        if (current_time - self.last_feed_time) >= delta_time:
+            self.hp += hp_increase
+            self.height += 1
+            self.power += 1
+            self.last_feed_time = current_time          
+            return f"Pokémon sağlığı geri yüklenir. Mevcut sağlık: {self.hp}"
+        else:
+            return f"Pokémonunuzu şu zaman besleyebilirsiniz: {self.last_feed_time+delta_time}"
     
                 
 
                 
 class Wizard(Pokemon):
-    pass
+    async def feed(self, feed_interval=10, hp_increase= 8):
+        super().feed(feed_interval, hp_increase)
+
+        #current_time = datetime.now()
+        #delta_time = timedelta(seconds=feed_interval)
+        #if (current_time - self.last_feed_time) > delta_time:
+            #self.hp += hp_increase
+            #self.last_feed_time = current_time
+            #return f"Pokémon sağlığı geri yüklenir. Mevcut sağlık: {self.hp}"
+        #else:
+            #return f"Pokémonunuzu şu zaman besleyebilirsiniz: {current_time+delta_time}"
     
 class Fighter(Pokemon):
     async def attack(self, enemy):
@@ -85,3 +109,15 @@ class Fighter(Pokemon):
         result = await super().attack(enemy)
         self.power -= super_power
         return result + f"\nDövüşçü Pokémon süper saldırı kullandı. Eklenen güç: {super_power}"
+    
+    async def feed(self, feed_interval=25, hp_increase= 15):
+        super().feed(feed_interval, hp_increase)
+
+        #current_time = datetime.now()
+        #delta_time = timedelta(seconds=feed_interval)
+        #if (current_time - self.last_feed_time) > delta_time:
+            #self.hp += hp_increase
+            #self.last_feed_time = current_time
+            #return f"Pokémon sağlığı geri yüklenir. Mevcut sağlık: {self.hp}"
+        #else:
+            #return f"Pokémonunuzu şu zaman besleyebilirsiniz: {current_time+delta_time}"
