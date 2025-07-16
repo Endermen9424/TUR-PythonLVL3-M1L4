@@ -65,5 +65,10 @@ async def feed(ctx):
         await ctx.send(f"{pokemon.name} besleniyor! Yüksekliği şimdi: {pokemon.height}")
     else:
         await ctx.send("Önce bir Pokémon oluşturmalısınız! `!go` komutunu kullanın.")
+
+async def info(ctx):
+    if ctx.author.name in Pokemon.pokemons:
+        pok = Pokemon.pokemons[ctx.author.name]
+        await ctx.send(await pok.info())
 # Botun çalıştırılması
 bot.run(token)
